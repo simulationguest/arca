@@ -3,7 +3,7 @@
 
 Simple, fast, rust-based [sqlite archive](https://www.sqlite.org/sqlar.html) extraction tool.
 
-Proof of concept, not a fully-featured archival. Do not use in production.
+Proof of concept, not a fully-featured archival tool. Do not use in production.
 
 
 ## Usage
