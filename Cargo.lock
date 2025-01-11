@@ -70,6 +70,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "arca"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "flate2",
+ "rusqlite",
+ "thiserror",
+ "walkdir",
+]
+
+[[package]]
 name = "bitflags"
 version = "2.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -281,17 +292,6 @@ name = "smallvec"
 version = "1.13.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3c5e1a9a646d36c3599cd173a41282daf47c44583ad367b8e6837255952e5c67"
-
-[[package]]
-name = "sqlitepack"
-version = "0.1.0"
-dependencies = [
- "clap",
- "flate2",
- "rusqlite",
- "thiserror",
- "walkdir",
-]
 
 [[package]]
 name = "strsim"
