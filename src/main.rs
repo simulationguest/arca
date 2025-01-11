@@ -1,4 +1,4 @@
-use crate::sqlar::extract_archive;
+use crate::sqlar::{extract_archive, Error};
 use crate::Cmd::Extract;
 use clap::{Parser, Subcommand};
 use sqlar::create_archive;
@@ -30,17 +30,17 @@ enum Cmd {
     Extract { from: PathBuf, to: PathBuf },
 }
 
-fn main() {
+fn main() -> Result<(), Error> {
     let args = Args::parse();
 
     match args.cmd {
         Cmd::Create { path } => {
             let mut out_path = path.as_os_str().to_os_string();
             out_path.push(".sqlite");
-            create_archive(&path, Path::new(&out_path), args.opts).unwrap();
+            create_archive(&path, Path::new(&out_path), args.opts)
         }
         Extract { from, to } => {
-            extract_archive(&from, &to, args.opts).unwrap();
+            extract_archive(&from, &to, args.opts)
         }
     }
 }
