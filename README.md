@@ -23,17 +23,10 @@ arca extract <archive> <output directory>
 
 ## Installation
 
-Install the Rust toolchain with [rustup](https://rustup.rs).
+Make sure you have the Rust toolchain [rustup](https://rustup.rs) installed.
 
-Then, build the project with cargo:
+Then, install with `cargo`:
 
 ```sh
-cargo b --release
+cargo install --git https://github.com/simulationguest/arca
 ```
-
-and copy the executable to a binary folder of your choice, e.g. `~/bin`:
-
-```
-cp ./target/release/arca ~/bin
-```
-    
