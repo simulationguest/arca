@@ -8,6 +8,7 @@ use std::os::unix::fs::{MetadataExt, PermissionsExt};
 use std::path::Path;
 use std::time::{Duration, SystemTime};
 use walkdir::WalkDir;
+use crate::GlobalOpts;
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
@@ -27,7 +28,7 @@ pub enum Error {
     FailedToConvertString,
 }
 
-pub fn create_archive(dir: &Path, dest: &Path) -> Result<(), Error> {
+pub fn create_archive(dir: &Path, dest: &Path, global_opts: GlobalOpts) -> Result<(), Error> {
     if std::fs::exists(dest)? {
         return Err(Error::FileAlreadyExists);
     }
@@ -70,6 +71,10 @@ pub fn create_archive(dir: &Path, dest: &Path) -> Result<(), Error> {
             .to_str()
             .ok_or(Error::FailedToConvertString)?;
 
+        if global_opts.verbose {
+            println!("{name}");
+        }
+
         let metadata = entry.metadata()?;
 
         let last_modified = metadata
@@ -105,7 +110,7 @@ pub fn create_archive(dir: &Path, dest: &Path) -> Result<(), Error> {
     Ok(())
 }
 
-pub fn extract_archive(from: &Path, to: &Path) -> Result<(), Error> {
+pub fn extract_archive(from: &Path, to: &Path, global_opts: GlobalOpts) -> Result<(), Error> {
     let conn = Connection::open(from)?;
 
     let mut stmt = conn.prepare("SELECT name, mode, mtime, rowid FROM sqlar;")?;
@@ -120,6 +125,10 @@ pub fn extract_archive(from: &Path, to: &Path) -> Result<(), Error> {
         let blob = conn.blob_open(rusqlite::DatabaseName::Main, "sqlar", "data", row_id, true)?;
 
         let mut decoder = DeflateDecoder::new(blob);
+
+        if global_opts.verbose {
+            println!("{name}");
+        }
 
         let name = to.join(Path::new(name.as_str()));
 

@@ -11,6 +11,17 @@ mod sqlar;
 struct Args {
     #[command(subcommand)]
     cmd: Cmd,
+
+    #[clap(flatten)]
+    opts: GlobalOpts
+}
+
+#[derive(Debug, Parser)]
+struct GlobalOpts {
+
+    #[clap(short, long, default_value = "false")]
+    verbose: bool,
+
 }
 
 #[derive(Debug, Subcommand)]
@@ -26,10 +37,10 @@ fn main() {
         Cmd::Create { path } => {
             let mut out_path = path.as_os_str().to_os_string();
             out_path.push(".sqlite");
-            create_archive(&path, Path::new(&out_path)).unwrap();
+            create_archive(&path, Path::new(&out_path), args.opts).unwrap();
         }
         Extract { from, to } => {
-            extract_archive(&from, &to).unwrap();
+            extract_archive(&from, &to, args.opts).unwrap();
         }
     }
 }
