@@ -5,16 +5,6 @@ use std::os::unix::fs::{MetadataExt, PermissionsExt};
 use std::time::SystemTime;
 use walkdir::WalkDir;
 
-fn create_table() -> &'static str {
-    "CREATE TABLE sqlar(
-      name TEXT PRIMARY KEY,
-      mode INT,
-      mtime INT,
-      sz INT,
-      data BLOB
-    );"
-}
-
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
     #[error("sqlite error: {0}")]
@@ -39,9 +29,16 @@ pub fn create_archive(dir: &str, dest: &str) -> Result<(), Error> {
     }
 
     let mut conn = Connection::open(dest)?;
-    conn.execute(create_table(), ())?;
 
     let tx = conn.transaction()?;
+
+    tx.execute("CREATE TABLE sqlar(
+      name TEXT PRIMARY KEY,
+      mode INT,
+      mtime INT,
+      sz INT,
+      data BLOB
+    );", ())?;
 
     let mut stmt = tx.prepare(
         "INSERT INTO sqlar (name, mode, mtime, sz, data) VALUES (?1, ?2, ?3, ?4, ZEROBLOB(?5))",
@@ -92,3 +89,5 @@ pub fn create_archive(dir: &str, dest: &str) -> Result<(), Error> {
 
     Ok(())
 }
+
+
