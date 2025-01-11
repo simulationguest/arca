@@ -1,0 +1,11 @@
+[package]
+name = "sqlitepack"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.5.26", features = ["derive"] }
+rusqlite = { version = "0.32.1", features = ["bundled", "blob"] }
+flate2 = "1.0"
+thiserror = "2.0.11"
+walkdir = "2.5.0"
